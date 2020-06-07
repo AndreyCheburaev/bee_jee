@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     if ARGV[0] == "up" || ARGV[0] == "provision" || ARGV[0] == "reload"
         # Пробрасываем порты наружу из виртуалки
         if PORT_MAPPING_ENABLED
-            puts ">>> Configuring forwarded port mapping. Add to the hosts\n127.0.0.1 #{VAGRANT_HOSTNAME}\n127.0.0.1 bean.#{VAGRANT_HOSTNAME}"
+            puts ">>> Configuring forwarded port mapping. Add to the hosts\n127.0.0.1 #{VAGRANT_HOSTNAME}"
             config.vm.network "forwarded_port", guest: 80, host: 8082 # webserver
             config.vm.network "forwarded_port", guest: 443, host: 8083 # webserver
             config.vm.network "forwarded_port", guest: 27017, host: 28017 # mongodb
@@ -38,7 +38,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
 
         # настраиваем приватную сеть, чтобы виртуалка работала со своими IP в локальной сети
         if SERVER_PRIVATE_IP
-            puts ">>> Configuring private network. Add to the hosts\n#{SERVER_PRIVATE_IP} #{VAGRANT_HOSTNAME}\n#{SERVER_PRIVATE_IP} bean.#{VAGRANT_HOSTNAME}"
+            puts ">>> Configuring private network. Add to the hosts\n#{SERVER_PRIVATE_IP} #{VAGRANT_HOSTNAME}"
             # Private network, which allows host-only access to the machine using its IP
             config.vm.network "private_network", ip: SERVER_PRIVATE_IP
         end
@@ -47,8 +47,8 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
         # NFS can offer a solution if you see bad performance with synced folders
         if NFS_ENABLED
             puts ">>> Configuring NFS shared folder"
-            config.vm.synced_folder ".", PROJECT_ROOT,
-            nfs: true
+            config.vm.synced_folder ".", PROJECT_ROOT
+            # nfs: true
             # mount_options: ['nolock,vers=3,udp,noatime'],
         else
             config.vm.synced_folder ".", PROJECT_ROOT
