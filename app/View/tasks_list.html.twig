@@ -1,0 +1,61 @@
+{% block body %}
+    {% if count > 1 %}
+        {% set title = ['Сортировка по-умолчанию',
+            'Сортировка по статусу задачи',
+            'Сортировка по имени пользователя (по-возрастанию)',
+            'Сортировка по имени пользователя (по-убыванию)',
+            'Сортировка по e-mail (по-убыванию)'] %}
+        <div>
+            <select id="sortingType" class="custom-select">
+                {% for i, val in title %}
+                    <option value="{{ i }}" {% if i == sort %} selected {% endif %}>{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
+    <div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col" style="width: 100px;">Статус</th>
+                <th scope="col" style="width: 160px;">Название задачи</th>
+                <th scope="col" style="width: 160px;">Пользователь</th>
+                <th scope="col" style="width: 160px;">E-mail</th>
+                <th scope="col">Текст задачи</th>
+                <th scope="col" style="width: 160px;">Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if count > 0 %}
+                {% for task in tasks %}
+                    {% set status = 'В работе' %}
+                    {% if task.status %}
+                        {% set status = 'Завершена' %}
+                    {% endif %}
+                    <tr>
+                        <td>{{ status }}</td>
+                        <td><a href="task/get?id={{ task._id }}" target="_blank">{{ task.name }}</a></td>
+                        <td>{{ task.user }}</td>
+                        <td>{{ task.email }}</td>
+                        <td>{{ task.text }}</td>
+                        <td>{% if task.edit==true %}отредактировано администратором{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">Нет задач.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        {% if count > 3 %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% for i in 1..pages %}
+                        <li class="page-item"><a class="page-link" href="/?page={{ i }}">{{ i }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}
