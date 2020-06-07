@@ -39,6 +39,10 @@ echo "server {
         log_not_found  off;
     }
 
+    location ~* \.(js|jpg|png|css)$ {
+        root /home/ubuntu/project/app/View/common/;
+        expires 30d;
+    }
 
     location ~ \.php {
         try_files \$uri =404;
